@@ -1,0 +1,34 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="controls">
+   <p> Select Camera:  
+    <select id="select">
+      <option></option>
+    </select>
+  </p>
+  </div>
+    <div class="container">
+        <figure>
+            <!-- <video controls id="video" src="https://assets.codepen.io/9632/SampleVideo_1280x720_1mb.mp4"></video> -->
+            <video autoplay="true" muted="true" id="video"></video>
+            <canvas id="canvas_counter"></canvas>
+            <canvas id="canvas_square"></canvas>
+            <figcaption>
+              <!-- <label id="timer" for="progress" role="timer"></label> -->
+              <button id="play" aria-label="Play" role="button" disabled="disabled">►</button>
+              <progress id="progress" max="100" value="0">Progress</progress>
+              </figcaption>
+          </figure>
+    </div> 
+</body>
+
+<script type = "module" src="webcam_audio_test2.js"></script>
+
+</html>

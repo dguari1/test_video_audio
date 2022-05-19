@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+    background-color: #002a5c; 
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table tfoot tr {
+    background-color: #002a5c;
+    color: #ffffff;
+    text-align: Center;
+    font-size: xx-large;
+
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #002a5c;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.button {
+  background-image: linear-gradient(-180deg, #37AEE2 0%, #002a5c 100%);
+  border-radius: .5rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  padding: 1rem 1.75rem;
+  text-decoration: none;
+  width: 25%;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button:hover {
+  background-image: linear-gradient(-180deg, #1D95C9 0%, #010f20 100%);
+}
+
+.button-wrapper .button {
+    margin-bottom:5px;
+}
+
+@media (min-width: 768px) {
+  .button {
+    padding: 1rem 2rem;
+  }
+}
+</style>
+</head>
+
+<body>
+    <center>
+
+    
+    <div class="Table">
+    <table id="tabletoFill" class="styled-table">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot id="tableFooter">
+            <tr>
+                <td colspan="2" id="textFooter"></td>
+            </tr>
+            <tr>
+                <td colspan="2" id="textFooter2"></td>
+            </tr>
+
+        </tfoot> 
+    </table>
+    </div>
+    <div class='button-wrapper'>
+        <button class="button" role="button" data-inline="false" onClick="location.href='webcam_test.html'">Test Again</button>
+        <button class="button" role="button" data-inline="false">Exit</button>
+    </div>
+    </center>
+
+
+
+    <script>
+        const table = document.getElementById("tableBody")
+        const tableFooter = document.getElementById("textFooter")
+        const tableFooter2 = document.getElementById("textFooter2")
+        const outputVideoTest = JSON.parse(localStorage.getItem('OutputVideoTest'))
+
+        // fill the table with the information provided by the previous page 
+        let row1 = table.insertRow();
+        let col11 = row1.insertCell(0);
+        col11.innerHTML = 'Video Width'
+        let col12 = row1.insertCell(1);
+        col12.innerHTML = outputVideoTest.frameWidth
+        //
+        let row2 = table.insertRow();
+        let col21 = row2.insertCell(0);
+        col21.innerHTML = 'Video Height'
+        let col22 = row2.insertCell(1);
+        col22.innerHTML = outputVideoTest.frameHeight
+        //
+        let row3 = table.insertRow();
+        let col31 = row3.insertCell(0);
+        col31.innerHTML = 'FPS Camera'
+        let col32 = row3.insertCell(1);
+        col32.innerHTML = outputVideoTest.fpsCamera + ' FPS'
+        //
+        let row4 = table.insertRow();
+        let col41 = row4.insertCell(0);
+        col41.innerHTML = 'FPS Processing'
+        let col42 = row4.insertCell(1);
+        col42.innerHTML = outputVideoTest.fpsProcessor + ' FPS'
+
+        //
+        let row5 = table.insertRow();
+        let col51 = row5.insertCell(0);
+        col51.innerHTML = 'Face in Frame'
+        let col52 = row5.insertCell(1);
+        col52.innerHTML = outputVideoTest.headinFrame + ' %'
+
+        //
+        let row6 = table.insertRow();
+        let col61 = row6.insertCell(0);
+        col61.innerHTML = 'Silence Power'
+        let col62 = row6.insertCell(1);
+        col62.innerHTML = outputVideoTest.sumofSquaresSilence 
+
+        //
+        let row7 = table.insertRow();
+        let col71 = row7.insertCell(0);
+        col71.innerHTML = 'Voice Power'
+        let col72 = row7.insertCell(1);
+        col72.innerHTML = outputVideoTest.sumofSquaresVoice 
+
+        //
+        let row8 = table.insertRow();
+        let col81 = row8.insertCell(0);
+        col81.innerHTML = 'Voice to Silence'
+        let col82 = row8.insertCell(1);
+        col82.innerHTML = outputVideoTest.signaltonoise + ' dB'
+
+        //
+        let row9 = table.insertRow();
+        let col91 = row9.insertCell(0);
+        col91.innerHTML = 'Max Sound'
+        let col92 = row9.insertCell(1);
+        col92.innerHTML = outputVideoTest.maxVoice  + '%'
+
+
+        //Check if the test passed or failed 
+        if (outputVideoTest.frameWidth > 600 && outputVideoTest.frameHeight > 350 && outputVideoTest.fpsCamera >= 25 && outputVideoTest.fpsProcessor >=25 && outputVideoTest.headinFrame > 90) {
+
+            tableFooter.innerHTML='Video Test Passed'
+            tableFooter.style.backgroundColor = "#008C76FF"; 
+        } else {
+            tableFooter.innerHTML='Video Test Failed'
+            tableFooter.style.backgroundColor = "#ED254EFF"; 
+        }
+
+        if (outputVideoTest.signaltonoise >= 20 && outputVideoTest.maxVoice < 98) {
+
+            tableFooter2.innerHTML='Audio Test Passed'
+            tableFooter2.style.backgroundColor = "#008C76FF"; 
+        } else {
+            tableFooter2.innerHTML='Audio Test Failed'
+            tableFooter2.style.backgroundColor = "#ED254EFF"; 
+        }
+
+    </script>
+</body>
+
+</html>
